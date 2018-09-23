@@ -1,6 +1,5 @@
 ﻿script "list field 'filenames'"
 
-global folderPath
 global oldFilename, oldFullFilename
 
 
@@ -14,7 +13,7 @@ end mouseDown
 
 on forceReload 
 	put line (the hilitedLine of me) of me into oldFilename
-	put folderPath&oldFilename into oldFullFilename
+	put field "path"&oldFilename into oldFullFilename
 
 	loadFile oldFullFilename
 end forceReload

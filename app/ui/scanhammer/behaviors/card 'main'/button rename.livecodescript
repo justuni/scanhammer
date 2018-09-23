@@ -6,15 +6,11 @@ on mouseUp
       put field "path" into thePath
       put thePath&newFilename&".pdf" into newFullFilename
       rename oldFullFilename to newFullFilename
-      breakpoint #debugx
-
-      #CODE BELOW SHOULD GO AWAY.  CALL OTHER CODE TO LOAD AFTER RELOADING THE LIST, THEN SELECT THE LINE THAT WAS THIS FILE
-      put newfilename into oldFilename
-      put newFullFilename into oldFullFilename
-      
-      put newFullFilename into tFile
-      replace " " with "%20" in tFile
-      set the url of widget "browser" to tFile
-      
+      #<reload list and select the line for the renamed file>
+         lock screen
+         send "mouseUp" to button "Load File List"
+         select line (lineoffset(newFilename,field "filenames")) of field "filenames"
+         send "forceReload" to field "filenames"
+      #</reload list and select the line for the renamed file>
    end if #field "filename" is not theFile
 end mouseUp

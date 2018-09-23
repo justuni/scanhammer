@@ -1,4 +1,4 @@
-﻿script "card 'main'"
+script "card 'main'"
 global oldFilename, oldFullFilename #original filename
 
 
@@ -23,15 +23,7 @@ end cls
 
 
 on loadFile what
-   #<display the pdf>
-      put what into filenameForURL
-      #NOTE: URLENCODE() DOESN'T WORK FOR BROWSER WIDGET
-      replace ";" with "%3B" in filenameForURL #browser widget doesn't like semicolons, either
-      replace " " with "%20" in filenameForURL
-      put "file:" before filenameForURL
-      set the url of widget "browser" to filenameForURL
-   #</display the pdf>
-
+   set the url of widget "browser" to fileConvertToFileURL(what)
    getshortFilenameFromLongFilename
 end loadFile
 
