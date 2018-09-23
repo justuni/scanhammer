@@ -11,9 +11,7 @@ command InitializeApplication
   # Perform initialization operations before UI stack is opened.
 
   # UNCOMMENT the code below to use Sublime Text external editor in development
-  -- if the environment is "development" then
-  --   levureLoadExternalEditorServer
-  -- end if
+  if the environment is "development" then levureLoadExternalEditorServer
 
   # UNCOMMENT the code below as well as the FirstRun command below to use a
   # preference setting to trigger a FirstRun handler. You must configure the

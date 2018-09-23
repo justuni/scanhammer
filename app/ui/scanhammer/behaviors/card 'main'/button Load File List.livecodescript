@@ -1,6 +1,7 @@
-﻿script "button 'Load File List'"
+script "button 'Load File List'"
 on mouseUp
-   put "/Users/me/Desktop/x./" into folderPath
+	global folderPath
+   put "/Users/me/Desktop/x./" into folderPath #xxx
    put files(folderPath) into filenames
    sort lines of filenames
    put 1 into i

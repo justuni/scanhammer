@@ -6,6 +6,9 @@ on mouseUp
       put field "path" into thePath
       put thePath&newFilename&".pdf" into newFullFilename
       rename oldFullFilename to newFullFilename
+      breakpoint #debugx
+
+      #CODE BELOW SHOULD GO AWAY.  CALL OTHER CODE TO LOAD AFTER RELOADING THE LIST, THEN SELECT THE LINE THAT WAS THIS FILE
       put newfilename into oldFilename
       put newFullFilename into oldFullFilename
       
