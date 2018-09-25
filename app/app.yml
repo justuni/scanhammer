@@ -1,7 +1,6 @@
 name: scanhammer
 version: 0.0.1
 build: 1
-external editor port: 61372
 encrypt stacks: false
 multiple instances: false
 relaunch in background: false

@@ -15,7 +15,7 @@ on forceReload
 	put line (the hilitedLine of me) of me into oldFilename
 	put field "path"&oldFilename into oldFullFilename
 
-	loadFile oldFullFilename
+	showPDF oldFullFilename
 end forceReload
 
 

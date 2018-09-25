@@ -4,11 +4,11 @@ on mouseUp
    global oldFilename, oldFullFilename #original filename
 
    #<get the file>
-   local tFile
-   answer file "Please choose the file you would like to display" with type "PDF document|pdf|PDF"
-   if it is empty then exit mouseUp
+   	local tFile
+   	answer file "Please choose the file you would like to display" with type "PDF document|pdf|PDF"
+   	if it is empty then exit mouseUp
    put it into oldFullFilename #for modifying the name
    #</get the file>
    
-   loadFile oldFullFilename
+   showPDF oldFullFilename
 end mouseUp

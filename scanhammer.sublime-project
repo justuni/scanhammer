@@ -1,23 +1,23 @@
 {
-	"folders":
-	[
-		{
-			"folder_exclude_patterns":
-			[
-				"builds"
-			],
-			"path": "app/",
-			"name": "scanhammer",
-		}
-	],
-	"livecode":
-	{
-  		"notify_on_save": true,
-  		"notify_server":
-  		{
-    		"host": "localhost",
-    		"port": 61372,
-    		"debug": false
-  		}
-	}
+    "folders":
+    [
+        {
+            "folder_exclude_patterns":
+            [
+                "builds"
+            ],
+            "path": "app/",
+            "name": "scanhammer",
+        }
+    ],
+    "livecode":
+    {
+        "notify_on_save": true,
+        "notify_server":
+        {
+            "host": "localhost",
+            "port": 61732,
+            "debug": false
+        }
+    }
 }

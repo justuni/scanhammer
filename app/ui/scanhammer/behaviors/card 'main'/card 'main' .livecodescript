@@ -22,10 +22,11 @@ on cls
 end cls
 
 
-on loadFile what
+
+on showPDF what
    set the url of widget "browser" to fileConvertToFileURL(what)
    getshortFilenameFromLongFilename
-end loadFile
+end showPDF
 
 
 
