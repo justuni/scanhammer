@@ -25,7 +25,7 @@ end cls
 
 
 
-on loadFileList
+on loadFileList lineNumberToHiliteAndLoad
    put files(field "path") into filenames
    sort lines of filenames
    put 1 into i
@@ -33,14 +33,19 @@ on loadFileList
       if char -4 to -1 of line i of filenames is not ".pdf" then delete line i of filenames else add 1 to i
    end repeat #while i<=the number of lines in filenames
    put filenames into field "filenames"
+   select line lineNumberToHiliteAndLoad of field "filenames"
+   send "forceReload" to field "filenames"
 end loadFileList
 
 
 
 on showPDF what
+   lock screen
    set the url of widget "browser" to fileConvertToFileURL(what)
    send "xpdf_show"&&what to group "xpdf"
    getshortFilenameFromLongFilename
+   click at the loc of field "filename"
+   unlock screen
 end showPDF
 
 
@@ -82,7 +87,7 @@ on guessNewFilename
    #</xxx>
 
    put newFilename into field "filename"
-   click at the loc of field "filename"
+   focus on field "filename"
 end guessNewFilename
 
 
