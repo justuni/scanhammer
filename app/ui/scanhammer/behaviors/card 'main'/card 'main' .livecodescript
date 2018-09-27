@@ -114,8 +114,8 @@ end updatePath
 ######################################################################################################################
 #<xpdf stuff>
 on resizeStack
-  put the width of me into pNewWidth
-  put the height of me into pNewHeight
+  put the width of group "xpdf" into pNewWidth
+  put the height of group "xpdf" into pNewHeight
   put the pdfThumbnails of control "pdfViewer" into tShowThumbnails
   put the pdfBookmarks of control "pdfViewer" into tShowBookmarks
   if tShowThumbNails OR tShowBookmarks then
