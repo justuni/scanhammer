@@ -20,8 +20,8 @@ application data folder:
     linux:
 preferences filename:
   user:
-    default:
-    macos:
+    default: scanhammer.prefs
+    macos: com.mikekerner.scanhammer
     windows:
     linux:
     ios:
