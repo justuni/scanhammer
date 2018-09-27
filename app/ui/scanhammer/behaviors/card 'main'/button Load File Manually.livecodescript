@@ -1,4 +1,5 @@
 ﻿script "button 'Load File Manually'"
+/*
 # DEPRECATED.  BUTTON HIDDEN.  Now we pick a directory and list all the files in there.
 on mouseUp
    global oldFilename, oldFullFilename #original filename
@@ -11,4 +12,9 @@ on mouseUp
    #</get the file>
    
    showPDF oldFullFilename
+end mouseUp
+*/
+
+on mouseUp
+   answer "Button 'load file manually' deprecated.  Please find the code that is calling it and remove it."
 end mouseUp
