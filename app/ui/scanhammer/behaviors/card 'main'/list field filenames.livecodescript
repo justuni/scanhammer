@@ -12,11 +12,15 @@ end mouseDown
 
 
 on loadThisLine 
-   put line (the hilitedLine of me) of me into oldFilename
-   put field "path"&oldFilename into oldFullFilename
-   
-   showPDF oldFullFilename
-   click at the loc of field "filename"
+   put line (the hilitedLine of me) of me into maybeFile #short filename
+   put field "path"&maybeFile into maybeFullFilename #long filename
+   if there is a file maybeFullFilename then
+      put maybeFile into oldFilename
+      put maybeFullFilename into oldFullFilename
+
+      showPDF oldFullFilename
+      click at the loc of field "filename"
+   end if #there is a file maybeFullFilename
 end loadThisLine
 
 

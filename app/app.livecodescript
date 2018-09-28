@@ -10,18 +10,7 @@ command InitializeApplication
   # Called after script-only stacks, extensions, and externals in app.yml are loaded.
   # Perform initialization operations before UI stack is opened.
 
-  # UNCOMMENT the code below to use Sublime Text external editor in development
   if the environment is "development" then levureLoadExternalEditorServer
-
-  # UNCOMMENT the code below as well as the FirstRun command below to use a
-  # preference setting to trigger a FirstRun handler. You must configure the
-  # `preferences filename` setting `app.yml` to use preferences.
-  -- # If this the first time application has run on this computer, call FirstRun
-  -- # This method requires the preferences framework helper to be loaded.
-  -- if prefsGetPref("software build") is empty then
-  --   FirstRun
-  --   prefsSetPref "software build", levureAppGet("build")
-  -- end if
 
   # Perform initialization operations every time application runs.
 
