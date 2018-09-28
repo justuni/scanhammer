@@ -6,27 +6,30 @@ global oldFilename, oldFullFilename
 on mouseDown
    if me is empty then exit mouseDown
    select the clickline
-   forceReload
+   loadThisLine
 end mouseDown
 
 
 
-on forceReload 
-	put line (the hilitedLine of me) of me into oldFilename
-	put field "path"&oldFilename into oldFullFilename
+on loadThisLine 
+   put line (the hilitedLine of me) of me into maybeFile #short filename
+   put field "path"&maybeFile into maybeFullFilename #long filename
+   if there is a file maybeFullFilename then
+      put maybeFile into oldFilename
+      put maybeFullFilename into oldFullFilename
 
-	showPDF oldFullFilename
-end forceReload
+      showPDF oldFullFilename
+      click at the loc of field "filename"
+   end if #there is a file maybeFullFilename
+end loadThisLine
 
 
 
 on arrowKey what
-   if what is "left" or "what" is "right" then pass arrowKey
-   
    put the hilitedLine of me into currentlySelectedLine
-   if what is "up" then # #up moves in negative direction, down in positive
+   if what is "left" or what is "up" then # #up moves in negative direction, down in positive
    	subtract 1 from currentlySelectedLine 
-   else #what is "down"
+   else #what is "down" or what is "right"
    	add 1 to currentlySelectedLine
    end if #what is "up"
 
@@ -39,5 +42,5 @@ on arrowKey what
       set the hilitedLine of me to currentlySelectedLine
    #</funky math>
    
-   forceReload
+   loadThisLine
 end arrowKey

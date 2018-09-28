@@ -1,10 +1,12 @@
-script "button 'Load File List'"
+﻿script "button 'Load File List'"
+/* DEPRECATED
+this button should not be necessary any more.
 on mouseUp
-	put files(field "path") into filenames
-	sort lines of filenames
-	put 1 into i
-	repeat while i<=the number of lines in filenames
-		if char -4 to -1 of line i of filenames is not ".pdf" then delete line i of filenames else add 1 to i
-   end repeat #while i<=the number of lines in filenames
-   put filenames into field "filenames"
+	loadFileList 1
 end mouseUp
+*/
+
+
+on mouseup
+   answer "button 'load file list' was deprecated.  find the offending code and remove it."
+end mouseup

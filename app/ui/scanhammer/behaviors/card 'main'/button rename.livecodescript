@@ -3,14 +3,15 @@ on mouseUp
    global oldFilename, oldFullFilename #old filename
    put field "filename" into newFilename
    if newFilename is not oldFilename then #filename changed
+      put the hilitedLine of field "filenames" into currentlySelectedLine
+      
+      #<rename the file>
       put field "path" into thePath
       put thePath&newFilename&".pdf" into newFullFilename
       rename oldFullFilename to newFullFilename
-      #<reload list and select the line for the renamed file>
-         lock screen
-         send "mouseUp" to button "Load File List"
-         select line (lineoffset(newFilename,field "filenames")) of field "filenames"
-         send "forceReload" to field "filenames"
-      #</reload list and select the line for the renamed file>
+      #</rename the file>
+      
+      loadFileList currentlySelectedLine
+      send "arrowKey down" to field "filenames" #go down 1 in the list.  This will also check to make sure we don't walk off the list
    end if #field "filename" is not theFile
 end mouseUp
