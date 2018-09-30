@@ -1,5 +1,5 @@
 name: scanhammer
-version: 0.0.1
+version: 0.1.0
 build: 1
 encrypt stacks: false
 multiple instances: false
