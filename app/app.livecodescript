@@ -10,7 +10,7 @@ command InitializeApplication
   # Called after script-only stacks, extensions, and externals in app.yml are loaded.
   # Perform initialization operations before UI stack is opened.
 
-  if the environment is "development" then levureLoadExternalEditorServer
+  if the environment is "development" then levureLoadExternalEditorServer 61732
 
   # Perform initialization operations every time application runs.
 
