@@ -2,7 +2,8 @@
 global oldFilename, oldFullFilename #original filename
 local datePickerVisible
 
-on preOpenCard   
+
+on preOpenCard
 	cls
 end preOpenCard
 
@@ -36,6 +37,7 @@ on loadDefaultPath #get the default path, populate the path field, load filenamd
 	put prefsGetPref("default path") into defaultPath
 	if defaultPath is not empty then
 		updatePath defaultPath
+		set the defaultFolder to defaultPath
 		loadFileList 1
   end if #currentPath is not empty
 end loadDefaultPath

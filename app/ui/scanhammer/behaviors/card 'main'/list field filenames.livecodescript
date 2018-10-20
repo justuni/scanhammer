@@ -7,19 +7,28 @@ global oldFilename, oldFullFilename
 
 on mouseUp whichButton
    #<context button delete>
-   if whichButton is 3 then 
-      put popChoose("Delete") into choice
-      if choice is "Delete" then
-         answer "Delete"&& quote&oldFilename&quote with "OK" or "Cancel"
-         if it is "OK" then 
-            put the hilitedLine of me into currentlySelectedLine #so we can select the next one in the list
-            delete file oldFullFilename
-            loadFileList currentlySelectedLine
-         end if #it
-      end if #Choice is "Delete"
-   else #not 3
-      pass mouseUp
-   end if #whichButton is 3
+      if whichButton is 3 then 
+         put popChoose("Delete" & cr & "-" & cr & "Duplicate") into choice
+         if choice is "Delete" then
+            answer "Delete"&& quote&oldFilename&quote with "OK" or "Cancel"
+            if it is "OK" then 
+               put the hilitedLine of me into currentlySelectedLine #so we can select the next one in the list
+               moveToTrash oldFullFilename
+            end if #it is "OK"
+         else if choice is "Duplicate" then
+            put "file:"&oldFullFilename into oldFullFilenameURL
+            #<make a filename for the copied file>
+               put oldFullFilenameURL into newFullFilenameURL
+               put " - copy" before char -4 of newFullFilenameURL
+            #</make a filename for the copied file>
+            put url oldFullFilenameURL into url newFullFilenameURL
+         end if #Choice is "Delete"
+
+         if the result is not empty then answer the result #debugx
+         loadFileList currentlySelectedLine
+      else #not 3
+         pass mouseUp
+      end if #whichButton is 3
    #</context button delete>
 end mouseUp
 
@@ -114,30 +123,32 @@ on MoveToTrash pFile
    #from Ken Ray
    -- Assumes pFile is full file path
    if there is not a file pFile then
-      return "Error: File '" & pFile & "' does not exist."
+      return "Error: File '" & pFile & "' does not exist." for error
    end if
+
    switch (the platform)
-      case "MacOS"
-         put "tell app `Finder`" & cr & \
-               "move POSIX file `" & pFile & "` to trash" & cr & \
-               "end tell" into tScript
-         replace "`" with quote in tScript
-         do tScript as "AppleScript"
-         if the result is "execution error" then return "Error: Could not move file '" & pFile & "' to the Trash."
-         break
-      case "Win32"
-         replace "/" with "\" in pFile
-         put "Const RECYCLE_BIN = &Ha&" & cr & \
-               "Set objShell = CreateObject(`Shell.Application`)" & cr & \
-               "Set recycleFolder = objShell.NameSpace(RECYCLE_BIN)" & cr & \
-               "recycleFolder.MoveHere `" & pFile & "`" into tScript
-         replace "`" with quote in tScript
-         do tScript as "VBScript"
-         -- VBS doesn't return any error codes for this action, so need to
-         -- check file existence and return an error if necessary
-         if there is a file pFile then
-            return "Error: Could not move file '" & pFile & "' to the Recycle Bin."
-         end if
-         break
+   case "MacOS"
+      put "tell app `Finder`" & cr & \
+      "move POSIX file `" & pFile & "` to trash" & cr & \
+      "end tell" into tScript
+      replace "`" with quote in tScript
+      do tScript as "AppleScript"
+      if the result is "execution error" then return "Error: Could not move file '" & pFile & "' to the Trash." for error
+      break
+   case "Win32"
+      replace "/" with "\" in pFile
+      put "Const RECYCLE_BIN = &Ha&" & cr & \
+      "Set objShell = CreateObject(`Shell.Application`)" & cr & \
+      "Set recycleFolder = objShell.NameSpace(RECYCLE_BIN)" & cr & \
+      "recycleFolder.MoveHere `" & pFile & "`" into tScript
+      replace "`" with quote in tScript
+      do tScript as "VBScript"
+      -- VBS doesn't return any error codes for this action, so need to
+      -- check file existence and return an error if necessary
+      if there is a file pFile then
+         return "Error: Could not move file '" & pFile & "' to the Recycle Bin." for error
+      end if
+      break
    end switch
+   return empty
 end MoveToTrash
