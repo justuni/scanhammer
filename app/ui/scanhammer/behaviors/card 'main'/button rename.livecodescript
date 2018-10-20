@@ -3,12 +3,13 @@ on mouseUp
    global oldFilename, oldFullFilename #old filename
    put field "filename" into newFilename
    if newFilename is not oldFilename then #filename changed
-      put the hilitedLine of field "filenames" into currentlySelectedLine
-      
+   	put the hilitedLine of field "filenames" into currentlySelectedLine
+   	
       #<rename the file>
-      put field "path" into thePath
-      put thePath&newFilename&".pdf" into newFullFilename
-      rename oldFullFilename to newFullFilename
+      	put field "path" into thePath
+      	put thePath&newFilename&".pdf" into newFullFilename
+      	rename oldFullFilename to newFullFilename
+      	if the result is not empty then answer the result
       #</rename the file>
       
       loadFileList currentlySelectedLine
