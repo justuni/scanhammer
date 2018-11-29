@@ -33,6 +33,7 @@ on mouseUp whichButton
 end mouseUp
 
 
+
 on mouseDown whichButton
    if me is empty or whichButton is 3 then exit mouseDown
    select the clickline
@@ -42,14 +43,21 @@ end mouseDown
 
 
 on loadThisLine 
-   put line (the hilitedLine of me) of me into maybeFile #short filename
-   put field "path"&maybeFile into maybeFullFilename #long filename
+   put the hilitedLine of me into lineNumber
+   put line lineNumber of the fullPaths of me into maybeFullFilename
    if there is a file maybeFullFilename then
-      put maybeFile into oldFilename
+      put line lineNumber of me into oldFilename
+      #<remove leading spaces>
+         repeat until char 1 of oldFilename is not space
+            delete char 1 of oldFilename
+         end repeat #until char 1 of oldFilename is not space
+      #</remove leading spaces>
       put maybeFullFilename into oldFullFilename
 
       showPDF oldFullFilename
       click at the loc of field "filename"
+   else #there is not a file maybefullfilename
+      answer "Uh oh.  I can't find"&&maybeFullFilename
    end if #there is a file maybeFullFilename
 end loadThisLine
 

@@ -3,6 +3,8 @@
 	on browserDocumentLoadFailed purl, perror
 		if perror is "plug-in handled load" then 
 		   #debugx focus on nothing
+		else if pError contains "NSURLErrorDomain error -999" then
+  			# this throws an error because it can't find the handler: browserNavigateComplete pURL
 		else #error is something else
 			put pError&CR&pURL into theError
 			set the clipboardData to theError
