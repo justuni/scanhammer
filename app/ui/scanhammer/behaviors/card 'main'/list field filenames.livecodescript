@@ -6,13 +6,15 @@ global oldFilename, oldFullFilename
 
 
 on mouseUp whichButton
+   put word 2 of the clickLine into theClickedLine # clickLine is a chunk expression #so we can select the next one in the list
+   if line theClickedLine  of the fullPaths of me is empty then exit mouseUp #directory, not a file.  No right-clicking on these.
+   set the hilitedLine of me to theClickedLine
    #<context button delete>
       if whichButton is 3 then 
          put popChoose("Delete" & cr & "-" & cr & "Duplicate") into choice
          if choice is "Delete" then
             answer "Delete"&& quote&oldFilename&quote with "OK" or "Cancel"
             if it is "OK" then 
-               put the hilitedLine of me into currentlySelectedLine #so we can select the next one in the list
                moveToTrash oldFullFilename
             end if #it is "OK"
          else if choice is "Duplicate" then
@@ -25,7 +27,7 @@ on mouseUp whichButton
          end if #Choice is "Delete"
 
          if the result is not empty then answer the result #debugx
-         loadFileList currentlySelectedLine
+         loadFileList theClickedLine
       else #not 3
          pass mouseUp
       end if #whichButton is 3

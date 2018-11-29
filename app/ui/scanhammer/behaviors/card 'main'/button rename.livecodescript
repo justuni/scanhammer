@@ -12,7 +12,7 @@ on mouseUp
       	if the result is not empty then answer the result
       #</rename the file>
       
-      loadFileList currentlySelectedLine
+      loadDefaultPath currentlySelectedLine
       send "arrowKey down" to field "filenames" #go down 1 in the list.  This will also check to make sure we don't walk off the list
    end if #field "filename" is not theFile
 end mouseUp

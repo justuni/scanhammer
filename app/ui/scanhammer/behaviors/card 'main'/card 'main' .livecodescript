@@ -41,12 +41,13 @@ end cls
 
 
 
-on loadDefaultPath #get the default path, populate the path field, load filenames, and display first file in the directory
+on loadDefaultPath lineNumber #get the default path, populate the path field, load filenames, and display first file in the directory
 	put prefsGetPref("default path") into defaultPath
 	if defaultPath is not empty then
 		updatePath defaultPath
 		set the defaultFolder to defaultPath
-		loadFileList 1
+		if lineNumber is empty then put 1 into lineNumber
+		loadFileList lineNumber
   end if #currentPath is not empty
 end loadDefaultPath
 
@@ -137,8 +138,8 @@ end directoryWalk
 
 
 
-/*
-function pdfsInDirectory
+
+function pdfsInDirectory #used by some XPDF code.  Will leave for now, even though I'm not using it for anything.  Note that this does not dive into subfolders.
 	put files(field "path") into filenames
 	sort lines of filenames
 	put 1 into i
@@ -147,7 +148,6 @@ function pdfsInDirectory
    end repeat #while i<=the number of lines in filenames
    return filenames
 end pdfsInDirectory
-*/
 
 
 
@@ -198,17 +198,23 @@ end commandKeyDown
 
 
 on guessNewFilename
+	if oldFilename is empty then exit guessNewFilename
 	put oldFilename into newFilename
 
    #<xxx> replace with parsing routine
-      # parsing DOC092018-09202018140934
-      if char 1 to 3 of newFilename is "DOC" and char 10 of newFilename is "-" then #only parse if it meets the above format, otherwise just put the existing filename in the new filename
+      # parsing DOC092018-09202018140934 or DOC092018-09202018140934/PAGE0001
+      if (char 1 to 3 of newFilename is "DOC") and (char 4 to 9 of newFilename is a number) and (char 10 of newFilename is "-") and (char 11 to -1 of newFilename is a number) then #only parse if it meets the above format, otherwise just put the existing filename in the new filename
       	set the itemDelimiter to "-"
       	put item 2 of newFilename into newFilename
       	put char 1 to 2 of newFilename into month
       	put char 3 to 4 of newFilename into day
       	put char 5 to 8 of newFilename into year
       	put year&"."&month&"."&day&space into newFilename
+      else if (char 1 to 4 of newFilename is "Page") and (char -4 to -1 of newFilename is a number) then #PAGE0001
+      	set the itemDelimiter to slash
+      	put item -2 of oldFullFilename into oldFilename # use the parent directory, which hopefully has the timestamp
+      	guessNewFilename # guess again using the parent folder which should be the timestamp
+	      exit guessNewFilename #only sort-of recursive.  Only after a success do we continue, which we will have via the other passes.
       end if #char 1 to 3 of newFilename is "DOC" and char 10 of newFilename is "-"
    #</xxx>
 
