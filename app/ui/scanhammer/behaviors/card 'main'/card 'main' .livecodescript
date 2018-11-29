@@ -119,7 +119,9 @@ private command directoryWalk whatFolder, filterFor
 		if theFile begins with "." then next repeat
       #<filter>
       	if filterFor is not empty then
-      		put char offset(".",theFile)+1 to -1 of theFile into theSuffix
+				set the itemDelimiter to "."
+				put the last item of theFile into theSuffix
+				set the itemDelimiter to comma
       		if theSuffix is not among the items of filterFor then next repeat
          end if #filterFor is not empty
       #</filter>

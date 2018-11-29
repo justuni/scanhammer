@@ -57,7 +57,7 @@ on loadThisLine
       showPDF oldFullFilename
       click at the loc of field "filename"
    else #there is not a file maybefullfilename
-      answer "Uh oh.  I can't find"&&maybeFullFilename
+      set the hilitedLine of me to 0
    end if #there is a file maybeFullFilename
 end loadThisLine
 
@@ -65,21 +65,39 @@ end loadThisLine
 
 on arrowKey what
    put the hilitedLine of me into currentlySelectedLine
+   put currentlySelectedLine into newlySelectedLine
+   put false into stopLooking
    if what is "left" or what is "up" then # #up moves in negative direction, down in positive
-   	subtract 1 from currentlySelectedLine 
+      #<walk backward until we either walk off the end or we stop on a filename, not a directory name>
+         repeat until stopLooking
+            subtract 1 from newlySelectedLine
+            if newlySelectedLine is 0 then #too far 
+               put currentlySelectedLine into newlySelectedLine
+               put true into stopLooking
+            else if line newlySelectedLine of the fullPaths of me is not empty then #bingo, this is a file
+               put true into stopLooking
+            else # newlySelectedLine is a directory,
+               #do nothing, let the loop continue
+            end if #newlySelectedLine is 0
+         end repeat #until stopLooking
+      #</walk backward until we either walk off the end or we stop on a filename, not a directory name>
    else #what is "down" or what is "right"
-   	add 1 to currentlySelectedLine
+      #<walk backward until we either walk off the end or we stop on a filename, not a directory name>
+         repeat until stopLooking
+            add 1 to newlySelectedLine
+            if newlySelectedLine > the number of lines in the fullPaths of me then #too far 
+               put currentlySelectedLine into newlySelectedLine # last selected line is the one we're going to use
+               put true into stopLooking
+            else if line newlySelectedLine of the fullPaths of me is not empty then #bingo, this is a file
+               put true into stopLooking
+            else # newlySelectedLine is a directory,
+               #do nothing, let the loop continue
+            end if #newlySelectedLine is 0
+         end repeat #until stopLooking
+      #</walk backward until we either walk off the end or we stop on a filename, not a directory name>
    end if #what is "up"
 
-   #<funky math>
-      # "CSL" is "currentlySelectedLine"
-      # calculate (from inside out) max(1,csl).  That way if CSL is <1 then we get 1.
-      # Then calculate min (size of list, calculation above).  That way if we're past the end, we return the end.
-      # combining the two of those gives a value that is between 1..size of list
-      put min (the number of lines in me, max (1,currentlySelectedLine)) into currentlySelectedLine
-      set the hilitedLine of me to currentlySelectedLine
-   #</funky math>
-   
+   set the hilitedLine of me to newlySelectedLine
    loadThisLine
 end arrowKey
 
