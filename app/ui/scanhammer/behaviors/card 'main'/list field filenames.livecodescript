@@ -13,7 +13,7 @@ on mouseUp whichButton
       if whichButton is 3 then 
          put popChoose("Delete" & cr & "-" & cr & "Duplicate") into choice
          if choice is "Delete" then
-            answer "Delete"&& quote&oldFilename&quote with "OK" or "Cancel"
+            answer "Delete"&& quote&oldFilename&quote with "Cancel" or "OK"
             if it is "OK" then 
                moveToTrash oldFullFilename
             end if #it is "OK"
