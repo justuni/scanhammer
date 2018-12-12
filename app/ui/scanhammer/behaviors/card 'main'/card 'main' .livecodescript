@@ -92,6 +92,7 @@ on loadFileList lineNumberToHiliteAndLoad
 							add 1 to levelsIn
 							add 2 to indentChars
 						else # doesn't contain slash, not any deeper
+							replace colon with slash in line i of field "filenames" #macos substitutes colon for slash.  Colon is not allowed in filenames
 							put makeString(space, indentChars) before line i of field "filenames" # 2 space indent for each directory level
 						end if #line i of field "filenames" contains slash 
 					#</file is either in the current subdirectory or the first file in a deeper subdirectory>
@@ -122,9 +123,9 @@ private command directoryWalk whatFolder, filterFor
 		if theFile begins with "." then next repeat
       #<filter>
       	if filterFor is not empty then
-				set the itemDelimiter to "."
-				put the last item of theFile into theSuffix
-				set the itemDelimiter to comma
+      		set the itemDelimiter to "."
+      		put the last item of theFile into theSuffix
+      		set the itemDelimiter to comma
       		if theSuffix is not among the items of filterFor then next repeat
          end if #filterFor is not empty
       #</filter>
@@ -174,6 +175,7 @@ on getShortFilenameFromLongFilename
    delete item 1 to -2 of oldFilename
    put thePath&slash into field "path"
    put oldFilename into field "wasFilename"
+   replace colon with slash in field "wasFilename" # macos replaces slash with colon in the name and colons are illegal in names
    guessNewFilename
 end getShortFilenameFromLongFilename
 
@@ -221,6 +223,7 @@ on guessNewFilename
    #</xxx>
 
    put newFilename into field "filename"
+   replace colon with slash in field "filename" #macos substitutes colon for slash, and colons are illegal
    focus on field "filename"
 end guessNewFilename
 

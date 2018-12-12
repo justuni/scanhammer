@@ -2,6 +2,7 @@
 on mouseUp
    global oldFilename, oldFullFilename #old filename
    put field "filename" into newFilename
+   replace slash with colon in newFilename #macos substitutes colon for slash, but colons are illegal
    if newFilename is not oldFilename then #filename changed
    	put the hilitedLine of field "filenames" into currentlySelectedLine
    	
