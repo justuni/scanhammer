@@ -1,6 +1,10 @@
 name: scanhammer
 version: 0.1.0
 build: 1
+logger:
+  types: developer
+  target: ~/Desktop/logs/scanhammer.log
+  include-log-type: false
 encrypt stacks: false
 multiple instances: false
 relaunch in background: false
@@ -44,6 +48,7 @@ backscripts:
 helpers:
   - folder: ./helpers
   - filename: "[[FRAMEWORK]]/helpers/preferences"
+  - filename: "[[FRAMEWORK]]/helpers/logger"
 behaviors:
   - folder: ./behaviors
 build folder: ../builds
