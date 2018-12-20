@@ -23,6 +23,7 @@ on mouseUp whichButton
                put oldFullFilenameURL into newFullFilenameURL
                put " - copy" before char -4 of newFullFilenameURL
             #</make a filename for the copied file>
+            loggerlogmsg "Copy" & tab & oldFullFilenameURL & tab & "to" & tab & newFullFilenameURL
             put url oldFullFilenameURL into url newFullFilenameURL
          end if #Choice is "Delete"
 
@@ -160,6 +161,7 @@ on MoveToTrash pFile
       "move POSIX file `" & pFile & "` to trash" & cr & \
       "end tell" into tScript
       replace "`" with quote in tScript
+      loggerlogmsg "Move" & tab & pFile & tab & "to" & tab & "Trash"
       do tScript as "AppleScript"
       if the result is "execution error" then return "Error: Could not move file '" & pFile & "' to the Trash." for error
       break
@@ -170,6 +172,7 @@ on MoveToTrash pFile
       "Set recycleFolder = objShell.NameSpace(RECYCLE_BIN)" & cr & \
       "recycleFolder.MoveHere `" & pFile & "`" into tScript
       replace "`" with quote in tScript
+      loggerlogmsg "Move" & tab & pFile & tab & "to" & tab & "Recycle"
       do tScript as "VBScript"
       -- VBS doesn't return any error codes for this action, so need to
       -- check file existence and return an error if necessary

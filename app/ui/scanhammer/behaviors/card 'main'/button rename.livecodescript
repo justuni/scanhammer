@@ -9,7 +9,7 @@ on mouseUp
       #<rename the file>
          put field "path" into thePath
          put thePath&newFilename&".pdf" into newFullFilename
-         loggerlogmsg "Rename"&&oldFullFilename&&"to"&&newFullFilename
+         loggerlogmsg "Rename"& tab & oldFullFilename& tab &"to"& tab &newFullFilename # make it easier to parse log later if we add extra columns for the operations, maybe?
          rename oldFullFilename to newFullFilename
          put the result into theResult
          if theResult is not empty then
