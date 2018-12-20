@@ -79,13 +79,14 @@ on loadFileList lineNumberToHiliteAndLoad
 			put 2 into indentChars # 2* (indentLevel+1)
 			set the itemDelimiter to slash
 			repeat until i > the number of lines in field "filenames"
+				put line i of field "filenames" into uneditedLine
 				if line i of field "filenames" begins with parentDirectory or levelsIn is 0 then # this file is inside of parentDirectory (or base directory), i.e. we're not out of files in parentDirectory
 					delete item 1 to levelsIn of line i of field "filenames" #remove the parentDirectory path
 					#<file is either in the current subdirectory or the first file in a deeper subdirectory>
 						if line i of field "filenames" contains slash then #first file of a deeper subdirectory (otherwise it would have been removed with the DELETE above)
-							put cr & line i of field "filenames" after line i of field "filenames" # make a copy of the line on the next line.  This line is going to be the next indented directory name
+							put cr & uneditedLine after line i of field "filenames" # make a copy of the unedited line on the next line.  This line is going to be the next indented directory name
 							put cr before line i of fullFilePaths # moving the next filename down a line to make way for a directory display
-							put item 1 of line i of field "filenames" after parentDirectory # new parent directory, add 1 level in case we have to add more and indent more
+							put item 1 of line i of field "filenames" & slash after parentDirectory # new parent directory, add 1 level in case we have to add more and indent more
 							delete item 2 to -1 of line i of field "filenames" # remove everything but the directory name from this line.  This will auto-delete the trailing slash.
 							put makeString(space, indentChars) before line i of field "filenames" # 2 space indent for each directory level
 							set the imageSource of char (indentChars-1) of line i of field "filenames" to collapseIcon # minus sign with a box
