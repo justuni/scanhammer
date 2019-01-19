@@ -9,10 +9,14 @@ on mouseUp whichButton
    put word 2 of the clickLine into theClickedLine # clickLine is a chunk expression #so we can select the next one in the list
    if line theClickedLine  of the fullPaths of me is empty then exit mouseUp #directory, not a file.  No right-clicking on these.
    set the hilitedLine of me to theClickedLine
-   #<context button delete>
+   loadFileList theClickedLine
+
+   #<context button>
       if whichButton is 3 then 
-         put popChoose("Delete" & cr & "-" & cr & "Duplicate") into choice
-         if choice is "Delete" then
+         put popChoose("Open" & cr & "-" & cr & "Delete" & cr & "-" & cr & "Duplicate") into choice
+         if choice is "Open" then
+            launch document oldFullFilename
+         else if choice is "Delete" then
             answer "Delete"&& quote&oldFilename&quote with "Cancel" or "OK"
             if it is "OK" then 
                moveToTrash oldFullFilename
@@ -27,12 +31,13 @@ on mouseUp whichButton
             put url oldFullFilenameURL into url newFullFilenameURL
          end if #Choice is "Delete"
 
-         if the result is not empty then answer the result #debugx
-         loadFileList theClickedLine
+         if the result is not empty then
+            answer the result #debugx
+         end if #the result is not empty
       else #not 3
          pass mouseUp
       end if #whichButton is 3
-   #</context button delete>
+   #</context button>
 end mouseUp
 
 
