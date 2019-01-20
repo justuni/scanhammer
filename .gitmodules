@@ -1,3 +1,12 @@
 [submodule "levure"]
 	path = levure
 	url = https://github.com/trevordevore/levure.git
+[submodule "app/helpers/levurehelper-file_browser"]
+	path = app/helpers/levurehelper-file_browser
+	url = https://github.com/macMikey/levurehelper-file_browser
+[submodule "app/helpers/levurehelper-dataview"]
+	path = app/helpers/levurehelper-dataview
+	url = https://github.com/trevordevore/levurehelper-dataview
+[submodule "app/helpers/levurehelper-dataview_tree"]
+	path = app/helpers/levurehelper-dataview_tree
+	url = https://github.com/macMikey/levurehelper-dataview_tree
