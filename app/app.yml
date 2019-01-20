@@ -49,9 +49,6 @@ helpers:
   - folder: ./helpers
   - filename: "[[FRAMEWORK]]/helpers/preferences"
   - filename: "[[FRAMEWORK]]/helpers/logger"
-  - filename: "[[FRAMEWORK]]/helpers/levurehelper-file_browser"
-  - filename: "[[FRAMEWORK]]/helpers/levurehelper-dataview"
-  - filename: "[[FRAMEWORK]]/helpers/levurehelper-dataview_tree"
 behaviors:
   - folder: ./behaviors
 build folder: ../builds
