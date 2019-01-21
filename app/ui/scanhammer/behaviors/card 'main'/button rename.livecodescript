@@ -9,6 +9,10 @@ on mouseUp
       #<rename the file>
          put field "path" into thePath
          put thePath&newFilename&".pdf" into newFullFilename
+         if there is a file newFullFilename then #file already exists
+            answer "File already exists."
+            exit mouseUp
+         end if #there is a file newFullFilename
          loggerlogmsg "Rename"& tab & oldFullFilename& tab &"to"& tab &newFullFilename # make it easier to parse log later if we add extra columns for the operations, maybe?
          rename oldFullFilename to newFullFilename
          put the result into theResult
