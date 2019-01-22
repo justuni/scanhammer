@@ -13,13 +13,13 @@ on mouseUp whichButton
 
    #<context button>
    	if whichButton is 3 then 
-         put popChoose("Open,-,Move to Trash,-,Duplicate") into choice
+         put _popChoose("Open,-,Move to Trash,-,Duplicate") into choice
          if choice is "Open" then
          	launch document oldFullFilename
          else if choice is "Delete" then
          	answer "Delete"&& quote&oldFilename&quote with "Cancel" or "OK"
          	if it is "OK" then 
-         		moveToTrash oldFullFilename
+         		_moveToTrash oldFullFilename
             end if #it is "OK"
          else if choice is "Duplicate" then
          	put "file:"&oldFullFilename into oldFullFilenameURL
@@ -116,14 +116,14 @@ end arrowKey
 
 
 
-function popChoose
+private function _popChoose
    /* Original from Peter Brigham
-   Tweaked by Mikey...
+   Tweaked by Mikey
+   Creates a popup menu with the choices listed in the first parameter (i.e. no need to create an invisible one)
    
-   popChoose() can accept a cr-delimited list of choices
+   popChoose() can accept a cr-delimited list of choices.
    or a space-comma-space delimited list or a comma-delimited list
-   eg: put choice1 & cr & choice2 & cr & choice3 into choiceList
-   put popChoose(choiceList) into userChoice
+   e.g. put popChoose(choice1 & cr & choice2 & cr & choice3) into userChoice
    or: put popChoose(choice1,choice2,choice3) into userChoice
    or: put popChoose("Vera","Chuck","Dave") into userChoice
    or: put popChoose("Open,Close,Save,-,Quit") into userChoice
@@ -170,11 +170,11 @@ function popChoose
       -- equivalent of mouseRelease, no action
    end if
    return u
-end popChoose
+end _popChoose
 
 
 
-on MoveToTrash pFile
+private command _MoveToTrash pFile
    #from Ken Ray
    -- Assumes pFile is full file path
    if there is not a file pFile then
@@ -208,4 +208,4 @@ on MoveToTrash pFile
       break
    end switch
    return empty
-end MoveToTrash
+end _MoveToTrash
