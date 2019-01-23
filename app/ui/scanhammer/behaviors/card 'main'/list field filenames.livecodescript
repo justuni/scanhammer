@@ -24,8 +24,20 @@ on mouseUp whichButton
          else if choice is "Duplicate" then
          	put "file:"&oldFullFilename into oldFullFilenameURL
             #<make a filename for the copied file>
-            	put oldFullFilenameURL into newFullFilenameURL
-            	put " - copy" before char -4 of newFullFilenameURL
+
+               #<break the new filename apart so we can check for uniqueness>
+               	put char 1 to -4 of oldFullFilenameURL into newFullFilenameURLWithoutExtension
+                  put char -3 to -1 of oldFullFilenameURL into newFilenameExtension
+                  put " - copy" after newFullFilenameURLWithoutExtension
+                  put 1 into copyCounter
+                  put newFullFilenameURLWithoutExtension & "." & newFilenameExtension into newFullFilenameURL # e.g. /home/me/splat - copy 1.pdf
+               #</break the new filename apart so we can check for uniqueness>
+
+               repeat until there is not a file newFullFilenameURL
+                  add 1 to copyCounter 
+                  put copyCounter into last word of newFullFilenameURLWithoutExtension
+                  put newFullFilenameURLWithoutExtension & "." & newFilenameExtension into newFullFilenameURL
+               end repeat #until there is not a file newFullFilenameURL
             #</make a filename for the copied file>
             loggerlogmsg "Copy" & tab & oldFullFilenameURL & tab & "to" & tab & newFullFilenameURL
             put url oldFullFilenameURL into url newFullFilenameURL

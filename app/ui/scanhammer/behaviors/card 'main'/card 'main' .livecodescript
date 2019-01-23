@@ -27,6 +27,8 @@ on cls
 	put empty into field "filename"
 	put empty into field "filenames"
 
+	send "resetView" to group "File Browser DataView"
+
 	put empty into oldFilename
 	put empty into oldFullFilename
 
