@@ -3,9 +3,7 @@ on mouseUp
    global oldFilename, oldFullFilename #old filename
    put field "filename" into newFilename
    if the platform is "MacOS" then replace slash with colon in newFilename #macos substitutes colon for slash, but colons are illegal
-   if newFilename is not oldFilename then #filename changed
-   	put the hilitedLine of field "filenames" into currentlySelectedLine
-   	
+   if newFilename is not oldFilename then #filename changed   	
       #<rename the file>
          put field "path" into thePath
          put thePath&newFilename&".pdf" into newFullFilename
@@ -23,7 +21,8 @@ on mouseUp
          end if #theResult is not empty
       #</rename the file>
       
-      loadDefaultPath currentlySelectedLine
-      send "arrowKey down" to field "filenames" #go down 1 in the list.  This will also check to make sure we don't walk off the list
+      loadDefaultPath
+
+      dispatch "selectNextRow" to group "file browser dataView"
    end if #field "filename" is not theFile
 end mouseUp

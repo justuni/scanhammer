@@ -4,9 +4,6 @@ local datePickerVisible
 local fileList
 
 
-constant expandIcon = 200086 # boxed +
-constant collapseIcon = 200087 # boxed -
-
 
 on preOpenCard
 	cls
@@ -25,7 +22,6 @@ on cls
 	put empty into field "path"
 	put empty into field "wasFilename"
 	put empty into field "filename"
-	put empty into field "filenames"
 
 	send "resetView" to group "File Browser DataView"
 
@@ -33,9 +29,6 @@ on cls
 	put empty into oldFullFilename
 
 	put empty into fileList
-	set the fullPaths of field "filenames" to empty
-
-	select line 0 of field "filenames"
 
 	send "mouseUp" to button "docPDF_Close"
 	hideDatePicker
@@ -43,117 +36,35 @@ end cls
 
 
 
+on selectedRowChanged
+	#<load the PDF and the filenames>
+		put the selectedFilePath of group "File Browser DataView" into thePath
+		if there is a file thePath then 
+			put the selectedFilePath of group "file browser dataView" into oldFullFilename #don't populate oldFilename, that's done below
+			showPDF thePath #could also be a folder
+		end if #there is a file thePath
+	#</load the pdf and the filenames>
+
+	pass selectedRowChanged
+end selectedRowChanged
+
+
+
 on loadDefaultPath lineNumber #get the default path, populate the path field, load filenames, and display first file in the directory
 	put prefsGetPref("default path") into defaultPath
+	put the dvHilitedID of group "file browser dataView" into selectedID
 	if defaultPath is not empty then
 		updatePath defaultPath
 		set the defaultFolder to defaultPath
 		if lineNumber is empty then put 1 into lineNumber
-		loadFileList lineNumber
+
+		set the expandAllNodes of group "File Browser DataView" to true
+		set the allowedExtensions of group "File Browser DataView" to ".pdf,.PDF"
+		set the dvRootFolder of group "File Browser DataView" to defaultPath
+		dispatch "RenderView" to group "File Browser DataView" #redraw
+		set the dvHilitedID of group "file browser dataView" to selectedID
   end if #currentPath is not empty
 end loadDefaultPath
-
-
-
-on loadFileList lineNumberToHiliteAndLoad
-	lock screen
-	put field "path" into baseDirectory
-	if baseDirectory ends with slash then delete last char of baseDirectory
-	put empty into fileList
-	set the fullPaths of field "filenames" to empty
-	directoryWalk baseDirectory, "pdf"
-
-	set the text of field "filenames" to fileList # do this now b/c also have to set the imageSource for folder lines
-	put fileList into fullFilePaths # going to be the full paths that correspond to the indented/shortened filenames going into the list.
-	#<modify the list for presentation in the field>
-		#<remove base directory prefix from each line>
-			put length(baseDirectory)+1 into charsToNuke #above we remove the trailing slash before directoryWalk, but we want to remove it here
-			repeat with i = 1 to the number of lines in field "filenames"
-				delete char 1 to charsToNuke of line i of field "filenames"
-			end repeat #with i = 1 to the number of lines in fileList
-		#<remove base directory prefix from each line>
-
-
-		#<visually offset directories>
-			put 1 into i
-			put empty into parentDirectory #i.e. under the base directory
-			put 0 into levelsIn # number of directory levels down from base
-			put 2 into indentChars # 2* (indentLevel+1)
-			set the itemDelimiter to slash
-			repeat until i > the number of lines in field "filenames"
-				put line i of field "filenames" into uneditedLine
-				if line i of field "filenames" begins with parentDirectory or levelsIn is 0 then # this file is inside of parentDirectory (or base directory), i.e. we're not out of files in parentDirectory
-					delete item 1 to levelsIn of line i of field "filenames" #remove the parentDirectory path
-					#<file is either in the current subdirectory or the first file in a deeper subdirectory>
-						if line i of field "filenames" contains slash then #first file of a deeper subdirectory (otherwise it would have been removed with the DELETE above)
-							put cr & uneditedLine after line i of field "filenames" # make a copy of the unedited line on the next line.  This line is going to be the next indented directory name
-							put cr before line i of fullFilePaths # moving the next filename down a line to make way for a directory display
-							put item 1 of line i of field "filenames" & slash after parentDirectory # new parent directory, add 1 level in case we have to add more and indent more
-							delete item 2 to -1 of line i of field "filenames" # remove everything but the directory name from this line.  This will auto-delete the trailing slash.
-							put makeString(space, indentChars) before line i of field "filenames" # 2 space indent for each directory level
-							set the imageSource of char (indentChars-1) of line i of field "filenames" to collapseIcon # minus sign with a box
-							add 1 to levelsIn
-							add 2 to indentChars
-						else # doesn't contain slash, not any deeper
-							if the platform is "MacOS" then replace colon with slash in line i of field "filenames" #macos substitutes colon for slash.  Colon is not allowed in filenames
-							put makeString(space, indentChars) before line i of field "filenames" # 2 space indent for each directory level
-						end if #line i of field "filenames" contains slash 
-					#</file is either in the current subdirectory or the first file in a deeper subdirectory>
-					add 1 to i
-				else if levelsIn >0 then # file is in a subdirectory, but not in the previous parent directory.  Go back a level and repeat the loop to try again
-					subtract 1 from levelsIn
-					subtract 2 from indentChars
-					delete last item of parentDirectory
-					#don't add 1 to i, i.e. not finished with this line.  Have to go up a level and try again.
-				end if #line i of levels in contains parentDirectory
-			end repeat #ntil i > the number of lines in field "filenames"
-		#</visually offset directories>
-	#</modify the list for presentation in the field>
-	set the fullPaths of field "filenames" to fullFilePaths
-	#was put pdfsInDirectory() into field "filenames"
-	select line lineNumberToHiliteAndLoad of field "filenames"
-	send "loadThisLine" to field "filenames"
-end loadFileList
-
-
-
-private command directoryWalk whatFolder, filterFor
-	#builds the list of all files in the directory with full paths, puts into fileList
-	set the directory to whatFolder
-	put the files into theFiles
-	sort theFiles
-	repeat for each line theFile in theFiles
-		if theFile begins with "." then next repeat
-      #<filter>
-      	if filterFor is not empty then
-      		set the itemDelimiter to "."
-      		put the last item of theFile into theSuffix
-      		set the itemDelimiter to comma
-      		if theSuffix is not among the items of filterFor then next repeat
-         end if #filterFor is not empty
-      #</filter>
-      put whatFolder & slash & theFile & cr after fileList
-   end repeat #for each line x in theFiles
-   put the folders into theFolders
-   sort theFolders
-   repeat for each line theFolder in theFolders
-   	if theFolder is "." or theFolder is ".." then next repeat
-   	directoryWalk (whatFolder & slash & theFolder), filterFor
-   end repeat #for each line x in theFolders
-end directoryWalk
-
-
-
-
-function pdfsInDirectory #used by some XPDF code.  Will leave for now, even though I'm not using it for anything.  Note that this does not dive into subfolders.
-	put files(field "path") into filenames
-	sort lines of filenames
-	put 1 into i
-	repeat while i<=the number of lines in filenames
-		if char -4 to -1 of line i of filenames is not ".pdf" then delete line i of filenames else add 1 to i
-   end repeat #while i<=the number of lines in filenames
-   return filenames
-end pdfsInDirectory
 
 
 
@@ -162,7 +73,7 @@ on showPDF what
 	set the url of widget "browser" to fileConvertToFileURL(what)
 	send "xpdf_show"&&what to group "xpdf"
 	getshortFilenameFromLongFilename
-	click at the loc of field "filename"
+	select after field "filename"
 	unlock screen
 end showPDF
 
@@ -185,7 +96,7 @@ end getShortFilenameFromLongFilename
 
 
 on arrowKey what
-	if what is "left" or what is "right" then pass arrowKey else send "arrowKey"&& what to field "filenames"
+	if what is "left" or what is "right" then pass arrowKey else send "dvArrowKey"&& what to group "File Browser DataView"
 end arrowKey
 
 
