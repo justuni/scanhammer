@@ -7,13 +7,13 @@ local sPathOfFileBelow # the paths of the files directly above and below the sel
 
 
 getProp selectedFilename
-return sFilename
+  return sFilename
 end selectedFilename
 
 
 
 getProp selectedFilePath
-return sFilePath
+  return sFilePath
 end selectedFilePath
 
 
@@ -50,9 +50,14 @@ on mouseDown pWhichButton # fileBrowser moves the selection on mouseDown not mou
 	dvMouseDown pWhichButton # select row, if necessary
 
 	if pWhichButton is 3 then #right-click
-		put _popChoose("Open,-,Delete,-,Duplicate") into choice
+		put _popChoose("Open,Show Parent Folder,-,Delete,-,Duplicate") into choice
 		if choice is "Open" then
 			launch document sFilePath
+    else if choice is "Show Parent Folder" then
+      put sFilePath into tFilePath
+      set the itemDelimiter to slash
+      delete last item of tFilePath
+      launch document tFilePath
 		else if choice is "Delete" then
 			answer "Delete"&& quote&sFilename&quote with "Cancel" or "OK"
 			if it is "OK" then 
