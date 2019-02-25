@@ -1,4 +1,4 @@
 ﻿script "Button 'Refresh'"
 on mouseup
-   dispatch "RenderView" to group "File Browser DataView"
+   send "redrawMe" to group "file browser dataView"
 end mouseup
