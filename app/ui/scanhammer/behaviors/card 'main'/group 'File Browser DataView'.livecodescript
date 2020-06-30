@@ -64,29 +64,29 @@ on mouseDown pWhichButton # fileBrowser moves the selection on mouseDown not mou
 		put _popChoose("Open,Open Parent Folder,Move...,Rename...,-,Duplicate,-,Delete...") into tChoice
 		if tChoice is "Open" then
 			launch document sFilePath
-    else if tChoice is "Open Parent Folder" then
-      put sFilePath into tFilePath
-      set the itemDelimiter to slash
-      delete last item of tFilePath
-      launch document tFilePath
-    else if tChoice is "Move..." then
-      _moveFile
-    else if tChoice is "Rename..." then
-      _renameFile
-    else if tChoice is "Duplicate" then
-      _duplicateFile
-    else if tChoice is "Delete..." then
-     answer "Delete"&& quote&sFilename&quote with "Cancel" or "OK"
-     if it is "OK" then 
-      _moveToTrash
-      end if #it is "OK"
-    end if #Choice is "Open"
+    	else if tChoice is "Open Parent Folder" then
+			put sFilePath into tFilePath
+			set the itemDelimiter to slash
+			delete last item of tFilePath
+			launch document tFilePath
+		else if tChoice is "Move..." then
+			_moveFile
+		else if tChoice is "Rename..." then
+			_renameFile
+		else if tChoice is "Duplicate" then
+			_duplicateFile
+		else if tChoice is "Delete..." then
+			answer "Delete"&& quote&sFilename&quote with "Cancel" or "OK"
+			if it is "OK" then 
+				_moveToTrash
+			end if #it is "OK"
+		end if #Choice is "Open"
 
-    if the result is not empty then
-    	answer the result
+		if the result is not empty then
+			answer the result
 		end if #the result is not empty
-		pass mouseDown
-  end if #pWhichButton is 3
+		# uncommented, this breaks delete.  does commenting it out break anything else? pass mouseDown
+	end if #pWhichButton is 3
 end mouseDown
 
 

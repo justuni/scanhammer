@@ -70,7 +70,7 @@ end loadDefaultPath
 
 on showPDF what
 	lock screen
-	set the url of widget "browser" to fileConvertToFileURL(what)
+	#debugx set the url of widget "browser" to fileConvertToFileURL(what)
 	send "xpdf_show"&&what to group "xpdf"
 	getshortFilenameFromLongFilename
 	select after field "filename"
